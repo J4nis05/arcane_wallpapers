@@ -1,3 +1,10 @@
 .venv/
 
 .DS_STORE
+
+
+videos/*.mkv
+videos/*.mp4
+videos/*.mov
+
+wallpapers/*.png

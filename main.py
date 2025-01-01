@@ -111,6 +111,11 @@ def resize_image(image, window_width = 1920):
         return image.resize((window_width, new_height), Image.Resampling.LANCZOS)
     return image
 
+
+# region history
+wallpaper_frames = []
+frame_index = 0
+
 #region Tkinter Window
 # ================================================================
 
@@ -119,7 +124,11 @@ window.title = "Wallpapers"
 window.geometry(f"{window_width}x{window_height}")
 
 current_frame = get_wallpaper()
+wallpaper_frames.append(current_frame)
 resized_frame = resize_image(current_frame, window_width)
+previous_frame = resized_frame
+next_frame = None
+is_previous = False
 
 #region Save Image
 def button1_click():
@@ -131,13 +140,44 @@ def button1_click():
 
 #region Generate new Image
 def button2_click():
-    global current_frame
-    current_frame = get_wallpaper()
+    global current_frame, next_frame, wallpaper_frames, frame_index
+
+    if frame_index+1 == len(wallpaper_frames):
+        wallpaper_frames.append(get_wallpaper())
+    
+    frame_index += 1
+    current_frame = wallpaper_frames[frame_index]
 
     resized = resize_image(current_frame, window_width)
     tk_image = ImageTk.PhotoImage(resized)
     image_label.config(image=tk_image)
     image_label.image = tk_image
+
+
+#region Load Previous Image
+def button3_click():
+    global current_frame, previous_frame, next_frame, wallpaper_frames, frame_index
+
+    if frame_index == 0:
+        wallpaper_frames.insert(0, get_wallpaper())
+    else:
+        frame_index -= 1
+
+    current_frame = wallpaper_frames[frame_index]
+
+    resized = resize_image(current_frame, window_width)
+    tk_image = ImageTk.PhotoImage(resized)
+    image_label.config(image=tk_image)
+    image_label.image = tk_image
+
+
+#region Key Handlers
+def key_handler_next_image(event):
+    button2_click()
+
+
+def key_handler_previous_image(event):
+    button3_click()
 
 
 #region Window Layout
@@ -157,6 +197,9 @@ image_label = tkinter.Label(image_frame)
 image_label.pack(expand=True)
 image_label.config(image=tk_image)
 image_label.image = tk_image
+
+window.bind("<Right>", key_handler_next_image)
+window.bind("<Left>", key_handler_previous_image)
 
 window.mainloop()
 
