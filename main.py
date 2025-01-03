@@ -113,7 +113,7 @@ wallpaper_frames = []
 wallpaper_frames.append(current_frame)
 
 
-#region Load Previous Image
+#region Previous Image
 def button1_click():
     global current_frame, previous_frame, next_frame, wallpaper_frames, frame_index
 
@@ -124,7 +124,7 @@ def button1_click():
 
     current_frame = wallpaper_frames[frame_index]
 
-    resized = resize_image(current_frame, window_width)
+    resized = resize_image(current_frame, window.winfo_width())
     tk_image = ImageTk.PhotoImage(resized)
     image_label.config(image=tk_image)
     image_label.image = tk_image
@@ -138,7 +138,7 @@ def button2_click():
     print(f"Saved Image to {filename}")
 
 
-#region Generate new Image
+#region Next Image
 def button3_click():
     global current_frame, next_frame, wallpaper_frames, frame_index
 
@@ -148,7 +148,7 @@ def button3_click():
     frame_index += 1
     current_frame = wallpaper_frames[frame_index]
 
-    resized = resize_image(current_frame, window_width)
+    resized = resize_image(current_frame, window.winfo_width())
     tk_image = ImageTk.PhotoImage(resized)
     image_label.config(image=tk_image)
     image_label.image = tk_image
