@@ -7,6 +7,7 @@ from PIL import Image, ImageTk
 import mimetypes
 import os
 import random
+import time
 import tkinter as tk
 import uuid
 # ==============================================================================
@@ -152,6 +153,19 @@ current_frame    = get_wallpaper()
 resized_frame    = resize_image(current_frame, window_width, window_height)
 wallpaper_frames = []
 wallpaper_frames.append(current_frame)
+
+preload_amount = 15
+preload_start = time.time()
+
+for i in range(preload_amount):
+    start = time.time()
+    wallpaper = get_wallpaper()
+    wallpaper_frames.append(wallpaper)
+    stop = time.time()
+    print(f"Took {stop - start:3f} Seconds to Preaload Image {i + 1} / {preload_amount}")
+
+preload_end = time.time()
+print(f"Preloaded {preload_amount} Images in {preload_end - preload_start:3f} Seconds")
 
 # ==============================================================================
 
